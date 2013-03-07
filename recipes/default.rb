@@ -29,9 +29,8 @@ end
 
 file ::File.join(node['takipi']['home'], "work", "secret.key") do
   mode "0600"
-  content node["takipi"]["service_key"]
+  content node["takipi"]["secret_key"]
 end
-
 
 ruby_block "tigger takipi install if not installed" do
   block do
