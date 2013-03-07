@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+#	/etc/rc.d/init.d/takipi
+#
+#	Takipi daemon
+#
+# chkconfig: 2345 20 80
+# description: Takipi daemon
+# processname: takipi-service
+# config: /etc/sysconfig/takipi
+# pidfile: /var/run/tkipi.pid
+
+# Source function library.
+. /etc/init.d/functions
+
+[ -r /etc/sysconfig/takipi ] && . /etc/sysconfig/takipi
+
+export JAVA_HOME
+export TAKIPI_BASE_URL
+export TAKIPI_NATIVE_LIBRARIES
+export JVM_LIB_FILE
+PIDFILE=/var/run/takipi.pid
+
+start() {
+	echo -n "Starting takipi: "
+	daemon $DAEMON --daemon
+    RETVAL=$?
+	touch /var/lock/subsys/takipi
+	return $RETVAL
+}	
+
+stop() {
+	echo -n "Shutting down takipi: "
+	killproc $DAEMON
+    RETVAL=$?
+	rm -f /var/lock/subsys/takipi
+	return $RETVAL
+}
+
+case "$1" in
+    start)
+		start
+		;;
+    stop)
+		stop
+		;;
+    status)
+	    status takipi-service
+		;;
+    restart|reload)
+    	stop
+        start
+		;;
+	*)
+		echo "Usage: takipi {start|stop|status|restart|reload}"
+		exit 1
+		;;
+esac
+exit $?
