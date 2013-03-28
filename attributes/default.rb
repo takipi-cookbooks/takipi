@@ -8,7 +8,7 @@ default["takipi"]["home"] = "/opt/takipi"
 default["takipi"]["base"] = "/opt/"
 default["takipi"]["server_name"] = "YOUR SERVER NAME HERE"
 
-default["takipi"]["java_arch"] = if platform? "ubuntu" and platform_version >= "11.10"
+default["takipi"]["java_arch"] = if (platform == "ubuntu") and (platform_version >= "11.10")
                                    if kernel.machine == "x86_64"
                                      "amd64"
                                    else
