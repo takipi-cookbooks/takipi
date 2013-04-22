@@ -3,7 +3,7 @@
 #
 include_recipe "java"
 
-if node.platform?("ubunt") and node["java"]["install_flavor"] == "openjdk"
+if node.platform?("ubuntu") and node["java"]["install_flavor"] == "openjdk"
   real_java_home = case node["java"]["install_flavor"]
                    when "openjdk"
                      "java-#{node["java"]["jdk_version"]}-openjdk-#{node["takipi"]["java_arch"]}"
