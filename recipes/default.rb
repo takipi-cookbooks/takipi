@@ -19,23 +19,6 @@ remote_file "/tmp/takipi/installer/takipi-latest.tar.gz" do
   notifies :run, "bash[install takipi]", :immediately
 end
 
-directory node['takipi']['home'] do
-  mode "755"
-end
-
-directory ::File.join(node['takipi']['home'], "work") do
-  mode "0700"
-end
-
-directory ::File.join(node['takipi']['home'], "log", "agents") do
-  mode "777"
-end
-
-file ::File.join(node['takipi']['home'], "work", "secret.key") do
-  mode "0600"
-  content node["takipi"]["secret_key"]
-end
-
 ruby_block "trigger takipi install if not installed" do
   block do
     true
@@ -51,6 +34,19 @@ EOS
   umask "0022"
   flags "-e"
   action :nothing
+end
+
+directory node['takipi']['home'] do
+  mode "0755"
+end
+
+directory ::File.join(node['takipi']['home'], "log", "agents") do
+  mode "0777"
+end
+
+file ::File.join(node['takipi']['home'], "work", "secret.key") do
+  mode "0600"
+  content node["takipi"]["secret_key"]
 end
 
 file ::File.join("/etc/ld.so.conf.d", "takipi.conf") do
