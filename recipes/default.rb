@@ -36,7 +36,7 @@ file ::File.join(node['takipi']['home'], "work", "secret.key") do
   content node["takipi"]["secret_key"]
 end
 
-ruby_block "tigger takipi install if not installed" do
+ruby_block "trigger takipi install if not installed" do
   block do
     true
   end
