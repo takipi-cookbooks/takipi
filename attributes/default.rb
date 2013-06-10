@@ -1,5 +1,5 @@
 include_attribute "java"
-default["takipi"]["use_runit"] = true
+default["takipi"]["use_runit"] = false
 default["takipi"]["tarball_url"] = "https://s3.amazonaws.com/app-takipi-com/deploy/linux/takipi-latest.tar.gz"
 default["takipi"]["tarball_checksum"] = "c30bdc3ba8801ca112112fbf2c81ebf6edc97505530e81dbe2f0eb4d49429458"
 default["takipi"]["secret_key"] = "YOUR SECRET KEY HERE"
