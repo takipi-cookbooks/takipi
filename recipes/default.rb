@@ -27,6 +27,10 @@ directory ::File.join(node['takipi']['home'], "work") do
   mode "0700"
 end
 
+directory ::File.join(node['takipi']['home'], "log", "agents") do
+  mode "777"
+end
+
 file ::File.join(node['takipi']['home'], "work", "secret.key") do
   mode "0600"
   content node["takipi"]["secret_key"]
