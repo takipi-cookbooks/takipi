@@ -6,7 +6,7 @@ www.takipi.com
 
 Requirements
 ============
-Java ( >1.6)
+Java ( >=1.6 )
 
 Attributes
 ==========
