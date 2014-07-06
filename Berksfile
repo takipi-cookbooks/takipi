@@ -1,5 +1,5 @@
-site :opscode
+source "https://api.berkshelf.com"
 
 metadata
-cookbook "java", github: "opscode-cookbooks/java"
-cookbook "takipi", github: "takipi-cookbooks/chef-takipi"
+
+cookbook "java"
