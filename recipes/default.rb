@@ -2,101 +2,42 @@
 # Cookbook Name:: takipi
 # Recipe:: default
 #
-# Copyright 2013, Fewbytes
-#
-# All rights reserved - Do Not Redistribute
-#
-include_recipe "takipi::java"
-
-directory "/tmp/takipi/installer" do
-  recursive true
-  mode "0755"
+log "welcome_message" do
+  message "About to install Takipi"
+  level :info
 end
 
-remote_file "/tmp/takipi/installer/takipi-latest.tar.gz" do
-  source node["takipi"]["tarball_url"]
-  checksum node["takipi"]["tarball_checksum"]
-  notifies :run, "bash[install takipi]", :immediately
-end
-
-ruby_block "trigger takipi install if not installed" do
-  block do
-    true
-  end
-  not_if {::File.exists?(::File.join(node['takipi']['home'], "lib", "libTakipiAgent.so"))}
-  notifies :run, "bash[install takipi]", :immediately
-end
-
-bash "install takipi" do
-  code <<-EOS
-tar -C #{node['takipi']['base']} -xzf /tmp/takipi/installer/takipi-latest.tar.gz
-EOS
-  umask "0022"
-  flags "-e"
-  action :nothing
-end
-
-directory node['takipi']['home'] do
-  mode "0755"
-end
-
-directory ::File.join(node['takipi']['home'], "log", "agents") do
-  mode "0777"
-end
-
-file ::File.join(node['takipi']['home'], "work", "secret.key") do
-  mode "0600"
-  content node["takipi"]["secret_key"]
-end
-
-file ::File.join("/etc/ld.so.conf.d", "takipi.conf") do
-  mode "0444"
-  content ::File.join(node["takipi"]["home"],"lib")
-  notifies :run, "execute[ldconfig]", :immediately
-end
-
-execute "ldconfig" do
-  command "ldconfig"
-  action :nothing
-  notifies :restart, "service[takipi]"
-end
-
-if node['takipi']['use_runit'] == true
-  runit_service "takipi" do
-    log false
-    env "TAKIPI_HOME" => node['takipi']['home'], 
-        "JAVA_HOME" => node['java']['java_home'],
-        "TAKIPI_BASE_URL" => node['takipi']['base_url'],
-        "TAKIPI_NATIVE_LIBRARIES" => ::File.join(node['takipi']['home'], "lib"),
-        "JVM_LIB_FILE" => node['takipi']['jvm_lib'],
-		    "TAKIPI_SERVER_NAME" => node['takipi']['server_name']
-  end
-else
-  case node.platform_family
-  when "debian"
-    template "/etc/default/takipi" do
-      source "takipi.default.erb"
-      mode "644"
-      notifies :restart, "service[takipi]"
-    end
-  when "rhel"
-    template "/etc/sysconfig/takipi" do
-      source "takipi.default.erb"
-      mode "644"
-      notifies :restart, "service[takipi]"
-    end
+case node.platform_family
+when "debian"
+  remote_file "/tmp/takipi.deb" do
+    source "https://app.takipi.com/app/download?t=deb&r=chef"
   end
 
-  cookbook_file "/etc/init.d/takipi" do
-    mode "0755"
-    source "takipi.init"
-    notifies :restart, "service[takipi]"
+  dpkg_package "takipi" do
+    source "/tmp/takipi.deb"
+    action :install
+  end
+when "rhel", "suse"
+  remote_file "/tmp/takipi.rpm" do
+    source "https://app.takipi.com/app/download?t=rpm&r=chef"
   end
 
-  service "takipi" do
-    action :enable
-    supports [:status]
-    pattern "takipi-service"
+  rpm_package "takipi" do
+    source "/tmp/takipi.rpm"
+    action :install
   end
 end
 
+bash "setup_takipi" do
+  cwd "/opt/takipi/etc"
+  code <<-EOH
+    ./takipi-setup-package #{node["takipi"]["secret_key"]}
+    EOH
+  action :run
+end
+
+log "fail_message" do
+  message "Takipi failed to install. Did you forget to add a Takipi secret_key?"
+  level :error
+  not_if {::File.exists?(::File.join("opt", "takipi", "work", "secret.key"))}
+end

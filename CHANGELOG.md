@@ -1,4 +1,7 @@
 # CHANGELOG for takipi
 
-This file is used to list changes made in each version of takipi.
+0.4.0
+Removed old installer format. Use deb/rpm to install Takipi.
 
+0.3.1
+Initial release
