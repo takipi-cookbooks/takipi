@@ -3,29 +3,35 @@
 # Recipe:: default
 #
 log "welcome_message" do
-  message "About to install Takipi"
+  message "Running takipi default recipe"
   level :info
 end
 
 case node.platform_family
-when "debian"
-  remote_file "/tmp/takipi.deb" do
-    source "https://app.takipi.com/app/download?t=deb&r=chef"
-  end
+  when "debian"
+    apt_repository "takipi" do
+      uri "http://deb.takipi.com"
+      distribution "squeeze"
+      components ["main"]
+      arch "amd64"
+      key "http://deb.takipi.com/hello@takipi.com.gpg.key"
+    end
 
-  dpkg_package "takipi" do
-    source "/tmp/takipi.deb"
-    action :install
-  end
-when "rhel", "suse"
-  remote_file "/tmp/takipi.rpm" do
-    source "https://app.takipi.com/app/download?t=rpm&r=chef"
-  end
+    apt_package "takipi" do
+      action :install
+    end
+  when "rhel", "suse"
+    yum_repository 'takipi' do
+      description "Takipi repo"
+      baseurl "https://s3.amazonaws.com/takipi-rpm-repo/"
+      gpgkey 'https://s3.amazonaws.com/takipi-rpm-repo/hello@takipi.com.gpg.key'
+      gpgcheck false
+      action :create
+    end
 
-  rpm_package "takipi" do
-    source "/tmp/takipi.rpm"
-    action :install
-  end
+    yum_package "takipi" do
+      action :install
+    end
 end
 
 bash "setup_takipi" do
@@ -34,10 +40,11 @@ bash "setup_takipi" do
     ./takipi-setup-package #{node["takipi"]["secret_key"]}
     EOH
   action :run
+  not_if do ::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) end
 end
 
 log "fail_message" do
   message "Takipi failed to install. Did you forget to add a Takipi secret_key?"
   level :error
-  not_if {::File.exists?(::File.join("opt", "takipi", "work", "secret.key"))}
+  not_if do ::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) end
 end
