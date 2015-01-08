@@ -1,5 +1,8 @@
 # CHANGELOG for takipi
 
+0.5.1
+Use Takipi official deb/rpm repositories when installing
+
 0.4.0
 Removed old installer format. Use deb/rpm to install Takipi.
 
