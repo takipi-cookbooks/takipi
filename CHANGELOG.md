@@ -1,6 +1,6 @@
 # CHANGELOG for takipi
 
-0.5.1
+0.5.2
 Use Takipi official deb/rpm repositories when installing
 
 0.4.0
