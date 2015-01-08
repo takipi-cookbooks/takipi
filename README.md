@@ -2,7 +2,9 @@ Description
 ===========
 Installing Takipi daemon using Chef (Current cookbook is only for Linux!)
 
-www.takipi.com
+https://supermarket.chef.io/cookbooks/takipi
+
+https://www.takipi.com
 
 Requirements
 ============
