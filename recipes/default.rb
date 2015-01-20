@@ -34,7 +34,16 @@ case node.platform_family
     end
 end
 
-bash "setup_takipi" do
+bash "setup_machine_name" do
+  cwd "/opt/takipi/etc"
+  code <<-EOH
+  ./takipi-setup-machine-name #{node["takipi"]["machine_name"]}
+  EOH
+  action :run
+  not_if do node["takipi"]["machine_name"] == "" end
+end
+
+bash "setup_secret_key" do
   cwd "/opt/takipi/etc"
   code <<-EOH
     ./takipi-setup-package #{node["takipi"]["secret_key"]}

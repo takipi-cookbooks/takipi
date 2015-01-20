@@ -17,6 +17,7 @@ Make sure you include your Takipi secret key as custom Chef JSON:
 {
   "takipi": {
     "secret_key": "YOUR SECRET KEY"
+    "machine_name": ""
   }
 }
 ```

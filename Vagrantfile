@@ -73,7 +73,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.json = {
       takipi: {
-        secret_key: "YOUR SECRET KEY HERE"
+        secret_key: "YOUR SECRET KEY HERE",
+        machine_name: ""
       }
     }
 
