@@ -18,7 +18,7 @@ case node.platform_family
     end
 
     apt_package "takipi" do
-      action :install
+      action node["takipi"]["package_action"]
     end
   when "rhel", "suse"
     yum_repository 'takipi' do
@@ -30,7 +30,7 @@ case node.platform_family
     end
 
     yum_package "takipi" do
-      action :install
+      action node["takipi"]["package_action"]
     end
 end
 

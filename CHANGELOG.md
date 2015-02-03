@@ -1,5 +1,7 @@
 # CHANGELOG for takipi
 
+Allow chosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
+
 0.5.3
 Added an option to change machine_name in Takipi
 
