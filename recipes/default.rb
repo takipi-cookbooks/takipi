@@ -10,11 +10,11 @@ end
 case node.platform_family
   when "debian"
     apt_repository "takipi" do
-      uri "http://deb.takipi.com"
-      distribution "squeeze"
+      uri "https://s3.amazonaws.com/takipi-deb-repo"
+      distribution "stable"
       components ["main"]
       arch "amd64"
-      key "http://deb.takipi.com/hello@takipi.com.gpg.key"
+      key "https://s3.amazonaws.com/takipi-deb-repo/hello@takipi.com.gpg.key"
     end
 
     apt_package "takipi" do

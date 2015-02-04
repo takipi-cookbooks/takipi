@@ -2,6 +2,9 @@
 
 Allow chosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
 
+0.5.4
+Added support for package_action install/update
+
 0.5.3
 Added an option to change machine_name in Takipi
 
