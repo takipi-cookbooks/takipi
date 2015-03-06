@@ -16,10 +16,6 @@ case node.platform_family
       arch "amd64"
       key "https://s3.amazonaws.com/takipi-deb-repo/hello@takipi.com.gpg.key"
     end
-
-    apt_package "takipi" do
-      action node["takipi"]["package_action"]
-    end
   when "rhel", "suse"
     yum_repository 'takipi' do
       description "Takipi repo"
@@ -28,10 +24,10 @@ case node.platform_family
       gpgcheck false
       action :create
     end
+end
 
-    yum_package "takipi" do
-      action node["takipi"]["package_action"]
-    end
+package "takipi" do
+  action node["takipi"]["package_action"]
 end
 
 bash "setup_machine_name" do
