@@ -16,10 +16,6 @@ case node.platform_family
       arch "amd64"
       key "https://s3.amazonaws.com/takipi-deb-repo/hello@takipi.com.gpg.key"
     end
-
-    apt_package "takipi" do
-      action node["takipi"]["package_action"]
-    end
   when "rhel", "suse"
     yum_repository 'takipi' do
       description "Takipi repo"
@@ -28,10 +24,11 @@ case node.platform_family
       gpgcheck false
       action :create
     end
+end
 
-    yum_package "takipi" do
-      action node["takipi"]["package_action"]
-    end
+package "takipi" do
+  action node["takipi"]["package_action"]
+  notifies :restart, "service[takipi]", :delayed
 end
 
 bash "setup_machine_name" do
@@ -40,6 +37,7 @@ bash "setup_machine_name" do
   ./takipi-setup-machine-name #{node["takipi"]["machine_name"]}
   EOH
   action :run
+  not_if "test -s /opt/takipi/takipi.properties"
   not_if {node["takipi"]["machine_name"] == ""}
 end
 
@@ -50,6 +48,11 @@ bash "setup_secret_key" do
     EOH
   action :run
   not_if {::File.exists?(::File.join("opt", "takipi", "work", "secret.key"))}
+end
+
+service "takipi" do
+  action [:enable, :start]
+  supports :restart => true, :stop => true, :start => true, :status => true
 end
 
 log "fail_message" do
