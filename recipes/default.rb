@@ -47,7 +47,7 @@ bash "setup_secret_key" do
     ./takipi-setup-package #{node["takipi"]["secret_key"]}
     EOH
   action :run
-  not_if {::File.exists?(::File.join("opt", "takipi", "work", "secret.key"))}
+  only_if {!::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) || ::File.zero?(::File.join("opt", "takipi", "work", "secret.key"))}
 end
 
 service "takipi" do
