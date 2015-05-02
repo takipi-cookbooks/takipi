@@ -1,6 +1,9 @@
 # CHANGELOG for takipi
 
-Allow chosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
+Allow choosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
+
+0.5.5
+Fix secret.key check (no more empty secret.key files)
 
 0.5.4
 Added support for package_action install/update

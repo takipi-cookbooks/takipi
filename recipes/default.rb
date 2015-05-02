@@ -58,5 +58,5 @@ end
 log "fail_message" do
   message "Takipi failed to install. Did you forget to add a Takipi secret_key?"
   level :error
-  not_if {::File.exists?(::File.join("opt", "takipi", "work", "secret.key"))}
+  only_if {!::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) || ::File.zero?(::File.join("opt", "takipi", "work", "secret.key"))}
 end
