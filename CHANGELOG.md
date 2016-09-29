@@ -2,6 +2,9 @@
 
 Allow choosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
 
+0.5.6
+Temp change to not use service for RHEL 6 (It chooses SysV over Upstart)
+
 0.5.5
 Fix secret.key check (no more empty secret.key files)
 

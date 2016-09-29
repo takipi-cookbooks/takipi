@@ -7,7 +7,7 @@ log "welcome_message" do
   level :info
 end
 
-case node.platform_family
+case node["platform_family"]
   when "debian"
     apt_repository "takipi" do
       uri "https://s3.amazonaws.com/takipi-deb-repo"
@@ -34,8 +34,8 @@ end
 bash "setup_machine_name" do
   cwd "/opt/takipi/etc"
   code <<-EOH
-  ./takipi-setup-machine-name #{node["takipi"]["machine_name"]}
-  EOH
+    ./takipi-setup-machine-name #{node["takipi"]["machine_name"]}
+    EOH
   action :run
   not_if "test -s /opt/takipi/takipi.properties"
   not_if {node["takipi"]["machine_name"] == ""}
@@ -53,6 +53,7 @@ end
 service "takipi" do
   action [:enable, :start]
   supports :restart => true, :stop => true, :start => true, :status => true
+  not_if {node[:platform_family] == 'rhel' && node[:platform_version].to_i == 6}
 end
 
 log "fail_message" do
