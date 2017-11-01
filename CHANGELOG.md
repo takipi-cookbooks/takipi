@@ -1,7 +1,9 @@
 # CHANGELOG for takipi
 
-## [0.5.7]
+## [0.6.0]
 - Allow to pass additional install parameters to the installer via node["takipi"]["installation_parameters"] attribute.
+- Allow run oneliner installation via node["takipi"]["installer_url"]=="INSTALLATION_URL" and node["takipi"]["use_fpm"]=="false" attributes.
+- Allow installing Agent only via node["takipi"]["installation_parameters"] attribute.
 
 ## [0.5.6]
 - Allow choosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
