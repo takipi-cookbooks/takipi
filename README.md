@@ -16,11 +16,11 @@ Make sure you include your Takipi secret key as custom Chef JSON, the following 
 ```
 {
   "takipi": {
-    "secret_key": "S3875#YAFwDEGg5oSIU+TM#G0G7VATLOqJIKtAMy1MObfFINaQmVT5hGYLQ+cpPuq4=#87a1",
-    "machine_name": "chef-test",
+    "secret_key": "YOUR SECRET KEY",
+    "machine_name": "",
     "use_fpm": "false",
     "installer_url": "http://get.takipi.com",
-    "installation_parameters": "--daemon_host=1.2.3.4 --daemon_port=6060"
+    "installation_parameters": ""
   }
 }
 
