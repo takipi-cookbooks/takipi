@@ -1,8 +1,10 @@
 # CHANGELOG for takipi
 
-Allow choosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
+0.5.7
+Allow to pass additional install parameters to the installer via node["takipi"]["installation_parameters"] attribute.
 
 0.5.6
+Allow choosing the package action (install/upgrade/remove) via `node["takipi"]["package_action”]` wrapper cookbook attribute.
 Temp change to not use service for RHEL 6 (It chooses SysV over Upstart)
 
 0.5.5

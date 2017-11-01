@@ -7,6 +7,8 @@ log "welcome_message" do
   level :info
 end
 
+secret_key_file = ::File.join("/", "opt", "takipi", "work", "secret.key")
+
 case node["platform_family"]
   when "debian"
     apt_repository "takipi" do
@@ -28,7 +30,7 @@ end
 
 package "takipi" do
   action node["takipi"]["package_action"]
-  notifies :restart, "service[takipi]", :delayed
+#  notifies :restart, "service[takipi]", :delayed
 end
 
 bash "setup_machine_name" do
@@ -44,20 +46,21 @@ end
 bash "setup_secret_key" do
   cwd "/opt/takipi/etc"
   code <<-EOH
-    ./takipi-setup-package #{node["takipi"]["secret_key"]}
+    ./takipi-setup-package #{node["takipi"]["secret_key"]} #{node["takipi"]["installation_parameters"]}
     EOH
   action :run
-  only_if {!::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) || ::File.zero?(::File.join("opt", "takipi", "work", "secret.key"))}
+  only_if {!::File.exists?(secret_key_file) || ::File.zero?(secret_key_file)}
 end
 
 service "takipi" do
-  action [:enable, :start]
+  action [:enable, :restart]
   supports :restart => true, :stop => true, :start => true, :status => true
   not_if {node[:platform_family] == 'rhel' && node[:platform_version].to_i == 6}
 end
 
 log "fail_message" do
-  message "Takipi failed to install. Did you forget to add a Takipi secret_key?"
+  message "Takipi failed to install. Did you forget to add a Takipi secret_key? #{secret_key_file}"
   level :error
-  only_if {!::File.exists?(::File.join("opt", "takipi", "work", "secret.key")) || ::File.zero?(::File.join("opt", "takipi", "work", "secret.key"))}
+  only_if {!::File.exists?(secret_key_file) || ::File.zero?(secret_key_file)}
 end
+
