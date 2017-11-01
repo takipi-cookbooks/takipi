@@ -12,14 +12,18 @@ Java ( >=1.6 )
 
 Attributes
 ==========
-Make sure you include your Takipi secret key as custom Chef JSON:
+Make sure you include your Takipi secret key as custom Chef JSON, the following example will install standalone agent, with oneliner installer instead package installation:
 ```
 {
   "takipi": {
     "secret_key": "YOUR SECRET KEY",
-    "machine_name": ""
+    "machine_name": "",
+    "use_fpm": "false",
+    "installer_url": "http://get.takipi.com",
+    "installation_parameters": ""
   }
 }
+
 ```
 Or in the default attributes file:
 ```
