@@ -4,6 +4,6 @@
     "machine_name": "chef-test",
     "use_fpm": "false",
     "installer_url": "http://get.takipi.com",
-    "installation_parameters": "--daemon_host=34.202.198.9 --daemon_port=6060"
+    "installation_parameters": ""
   }
 }
